@@ -23,7 +23,11 @@ public class Voluntario {
 
     @Getter  @Setter
     @Column(name = "edad", nullable = false, length = 3)
-    private String edad;
+    private int edad;
+
+    @Column(name = "gustos", nullable = false, length = 100)
+    private String gustos;
+
 
     @Getter  @Setter
     @Column(length = 50, nullable = false)

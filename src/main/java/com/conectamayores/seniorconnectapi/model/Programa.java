@@ -20,4 +20,6 @@ public class Programa {
     @Getter @Setter
     @Column(length = 50, nullable = false)
     private String nombre;
+
+
 }
