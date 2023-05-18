@@ -12,31 +12,26 @@ import lombok.*;
 @Entity
 public class AdultoMayor {
 
-    @Getter  @Setter
-    @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idAdultoMayor;
 
-    @Getter  @Setter
     @Column(length = 50, nullable = false)
     private String nombreCompleto;
 
-    @Getter  @Setter
     @Column(name = "edad", nullable = false, length = 3)
     private String edad;
 
-    @Getter  @Setter
+    @Column(name = "gustos", nullable = false, length = 100)
+    private String gustos;
+
     @Column(length = 50, nullable = false)
     private String tipoUsuario;
 
-    @Getter  @Setter
     @Column(nullable = false)
     private boolean apoyoEmocional;
 
-    @Getter  @Setter
     @Column(nullable = false)
     private boolean asistencia;
-
 
 }

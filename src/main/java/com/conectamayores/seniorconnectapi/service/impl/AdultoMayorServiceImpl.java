@@ -2,45 +2,48 @@ package com.conectamayores.seniorconnectapi.service.impl;
 
 
 import com.conectamayores.seniorconnectapi.model.AdultoMayor;
+import com.conectamayores.seniorconnectapi.repository.AdultoMayorRepository;
 import com.conectamayores.seniorconnectapi.service.IAdultoMayoresService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AdultoMayorServiceImpl implements IAdultoMayoresService <AdultoMayor,Integer> {
 
+    private final AdultoMayorRepository adultoMayorRepository;
 
     @Override
     public AdultoMayor createAdultoMayor(AdultoMayor adultoMayor) {
-        return null;
+        return adultoMayorRepository.save(adultoMayor);
     }
 
     @Override
-    public AdultoMayor getAdultoMayorById(Integer id) {
-        return null;
+    public Optional<AdultoMayor> getAdultoMayorById(Integer id) {
+        return adultoMayorRepository.findById(id);
     }
 
     @Override
     public List<AdultoMayor> getAllAdultosMayores() {
-        return null;
+        return adultoMayorRepository.findAll();
     }
 
     @Override
     public void deleteAdultoMayor(Integer id) {
-
+        adultoMayorRepository.deleteById(id);
     }
 
     @Override
     public AdultoMayor updateAdultoMayor(AdultoMayor adultoMayor) {
-        return null;
+        return adultoMayorRepository.save(adultoMayor);
     }
 
     @Override
     public AdultoMayor save(AdultoMayor adultoMayor) throws Exception {
-        return null;
+        return adultoMayorRepository.save(adultoMayor);
     }
 
     @Override
