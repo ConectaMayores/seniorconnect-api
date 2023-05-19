@@ -16,7 +16,7 @@ public class Familiar {
     @EqualsAndHashCode.Include
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer idAFamiliar;
+    private Integer idFamiliar;
 
     @Getter  @Setter
     @Column(length = 50, nullable = false)

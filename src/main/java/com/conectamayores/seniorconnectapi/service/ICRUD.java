@@ -8,5 +8,6 @@ public interface ICRUD <T, ID> {
 
     T readById(ID id) throws Exception;
 
+
     void delete(ID id) throws Exception;
 }
