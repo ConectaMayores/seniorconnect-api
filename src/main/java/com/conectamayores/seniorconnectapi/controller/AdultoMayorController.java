@@ -43,7 +43,6 @@ public class AdultoMayorController {
         adultoFound.setEdad(adultoMayor.getEdad());
         adultoFound.setApoyoEmocional(adultoMayor.isApoyoEmocional());
         adultoFound.setAsistencia(adultoMayor.isAsistencia());
-
         return new ResponseEntity<AdultoMayor>(adultoMayorRepository.save(adultoMayor),HttpStatus.OK);
     }
 
