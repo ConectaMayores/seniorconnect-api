@@ -4,7 +4,7 @@ import com.conectamayores.seniorconnectapi.model.Voluntario;
 
 import java.util.List;
 
-public interface IVoluntarioService extends ICRUD<Voluntario, Integer> {
+public interface IVoluntarioService<V, I extends Number> extends ICRUD<Voluntario, Integer> {
     Voluntario crearVoluntario(Voluntario voluntario);
     Voluntario obtenerVoluntarioPorId(Long id);
     List<Voluntario> obtenerTodosLosVoluntarios();
