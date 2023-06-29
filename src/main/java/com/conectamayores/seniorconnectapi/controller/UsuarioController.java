@@ -20,14 +20,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/usuario")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UsuarioController {
 
-    private final UsuarioRepository usuarioRepository;
+
     private final UsuarioServiceImpl usuarioService;
-    private final AdultoMayorRepository adultoMayorRepository;
+
 
     @PostMapping
-    public ResponseEntity<String> crearUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
         try {
             Usuario nuevoUsuario = usuarioService.crearUsuario(usuario);
             return ResponseEntity.status(HttpStatus.CREATED).body("Usuario "+ usuario.getNombreUsuario()+" registrado con exito ");
@@ -44,13 +45,13 @@ public class UsuarioController {
         return new ResponseEntity<List<Usuario>>(usuarioList, HttpStatus.OK);
     }
 
-    @PutMapping("/{username}/cambiar-contrasena")
-    public ResponseEntity<String> cambiarContraseña(@PathVariable String username, @RequestBody CambioContraseñaRequest request) {
+    @PutMapping("/{username}/change-password")
+    public ResponseEntity<String> cambiarContra(@PathVariable String username, @RequestBody CambioContraseñaRequest request) {
         try {
             usuarioService.cambiarContraseña(username, request.getContraseñaActual(), request.getNuevaContraseña());
             return ResponseEntity.ok("Contraseña cambiada con éxito");
         } catch (UsuarioNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario no existe " + username);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario que me has dado no existe " + username);
         } catch (ContraseñaInvalidaException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La contraseña actual es incorrecta " + request);
         } catch (ContraseñaIgualException e) {
@@ -63,6 +64,7 @@ public class UsuarioController {
     public ResponseEntity<String> handleUsuarioExistenteException(UsuarioExistenteException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+
 
 
 

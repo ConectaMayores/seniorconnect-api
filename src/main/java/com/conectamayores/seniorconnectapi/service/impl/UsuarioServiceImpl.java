@@ -56,14 +56,14 @@ public class UsuarioServiceImpl implements IUsuarioService{
         if (usuario == null) {
             throw new UsuarioNoEncontradoException("El usuario no existe");
         } else {
-            if (!usuario.getContraseña().equals(contraseñaActual)){
+            if (!usuario.getClave().equals(contraseñaActual)){
                 throw new ContraseñaInvalidaException("La contraseña actual es incorrecta");
             }
             else {
-                if (usuario.getContraseña().equals(contraseñaActual)) {
+                if (usuario.getClave().equals(contraseñaActual)) {
                     throw new ContraseñaIgualException("La nueva contraseña no puede ser igual a la actual");
                 } else {
-                    usuario.setContraseña(nuevaContraseña);
+                    usuario.setClave(nuevaContraseña);
                     usuarioRepository.save(usuario);
                 }
             }
