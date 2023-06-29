@@ -1,0 +1,42 @@
+package com.conectamayores.seniorconnectapi.model;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+
+import java.sql.Time;
+
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
+public class SolicitudDeAsistencia {
+
+    @EqualsAndHashCode.Include
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "solicitud_de_asistencia_id")
+    private int solicitudDeAsistenciaId;
+
+    @Column(name = "estado", length = 20, nullable = false)
+    private String estado;
+
+    @Column(name = "hora", nullable = false)
+    private Time hora;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "adulto_mayor_id")
+    private AdultoMayor adultoMayor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "voluntario_id")
+    private Voluntario voluntario;
+
+    @OneToOne(mappedBy = "solicitud", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Chat chat;
+
+}
