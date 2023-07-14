@@ -1,9 +1,12 @@
 package com.conectamayores.seniorconnectapi.dto;
 
+import com.conectamayores.seniorconnectapi.model.Usuario;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 public class AdultoMayorDTO {
+
+
     @NotBlank(message = "El nombre completo es obligatorio")
     private String nombreCompleto;
 

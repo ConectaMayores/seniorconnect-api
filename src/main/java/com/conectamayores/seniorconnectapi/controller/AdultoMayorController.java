@@ -5,7 +5,6 @@ import com.conectamayores.seniorconnectapi.config.AdultoMayorMapper;
 import com.conectamayores.seniorconnectapi.dto.AdultoMayorDTO;
 import com.conectamayores.seniorconnectapi.model.AdultoMayor;
 import com.conectamayores.seniorconnectapi.model.SolicitudDeAsistencia;
-import com.conectamayores.seniorconnectapi.repository.AdultoMayorRepository;
 import com.conectamayores.seniorconnectapi.exceptions.AdultoMayorNoEncontradoException;
 import com.conectamayores.seniorconnectapi.service.impl.AdultoMayorServiceImpl;
 import com.conectamayores.seniorconnectapi.service.impl.SolicitudDeAsistenciaServiceImpl;
@@ -23,9 +22,6 @@ public class AdultoMayorController {
 
     private final AdultoMayorServiceImpl adultoMayorService;
     private final SolicitudDeAsistenciaServiceImpl solicitudDeAsistenciaService;
-
-
-
 
 
     @PostMapping
@@ -48,7 +44,7 @@ public class AdultoMayorController {
             return ResponseEntity.noContent().build();
         }
 
-        return new ResponseEntity<List<AdultoMayor>>(adultosMayores,HttpStatus.OK);
+        return new ResponseEntity<>(adultosMayores, HttpStatus.OK);
     }
 
 
@@ -77,9 +73,6 @@ public class AdultoMayorController {
         solicitudDeAsistenciaService.crearSolicitud(solicitudDeAsistencia);
         return ResponseEntity.ok("Solicitud de asistencia creada con éxito");
     }
-
-
-
 
 
 

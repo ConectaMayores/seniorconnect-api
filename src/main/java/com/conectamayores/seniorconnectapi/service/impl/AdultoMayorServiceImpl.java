@@ -7,7 +7,6 @@ import com.conectamayores.seniorconnectapi.repository.AdultoMayorRepository;
 import com.conectamayores.seniorconnectapi.repository.UsuarioRepository;
 import com.conectamayores.seniorconnectapi.service.IAdultoMayoresService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,11 +18,7 @@ public class AdultoMayorServiceImpl implements IAdultoMayoresService <AdultoMayo
 
 
     private final AdultoMayorRepository adultoMayorRepository;
-
-    @Autowired
     private UsuarioRepository usuarioRepository;
-
-
 
     @Override
     public AdultoMayor createAdultoMayor(AdultoMayor adultoMayor) {
@@ -87,18 +82,17 @@ public class AdultoMayorServiceImpl implements IAdultoMayoresService <AdultoMayo
         existingAdultoMayor.setGenero(adultoMayor.getGenero());
 
         // Guardar los cambios en el repositorio
-        AdultoMayor updatedAdultoMayor = adultoMayorRepository.save(existingAdultoMayor);
 
-        return updatedAdultoMayor;
+        return adultoMayorRepository.save(existingAdultoMayor);
     }
 
     @Override
-    public List<AdultoMayor> readAll() throws Exception {
+    public List<AdultoMayor> readAll() {
         return null;
     }
 
     @Override
-    public AdultoMayor readById(Integer integer) throws Exception {
+    public AdultoMayor readById(Integer integer) {
         return null;
     }
 
@@ -108,10 +102,14 @@ public class AdultoMayorServiceImpl implements IAdultoMayoresService <AdultoMayo
     }
 
 
-
-
+    public AdultoMayor obtenerPorId(Integer adultoMayorId) {
+        return adultoMayorRepository.findById(adultoMayorId)
+                .orElseThrow(() -> new RuntimeException("No se encontró al adulto mayor con el ID: " + adultoMayorId));
+    }
 
 
 
 
 }
+
+
