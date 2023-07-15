@@ -1,9 +1,13 @@
 package com.conectamayores.seniorconnectapi.service.impl;
 
-import com.conectamayores.seniorconnectapi.model.SolicitudDeAsistencia;
+import com.conectamayores.seniorconnectapi.model.*;
 import com.conectamayores.seniorconnectapi.repository.SolicitudDeAsistenciaRepository;
+import com.conectamayores.seniorconnectapi.repository.VoluntarioRepository;
 import com.conectamayores.seniorconnectapi.service.ISolicitudDeAsistencia;
+import com.pubnub.api.PubNub;
+import com.pubnub.api.PubNubException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,7 +17,13 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 public class SolicitudDeAsistenciaServiceImpl implements ISolicitudDeAsistencia {
 
+    @Autowired
     private final SolicitudDeAsistenciaRepository solicitudDeAsistenciaRepository;
+    private  final PubNub pubNub;
+    @Autowired
+    private VoluntarioServiceImpl voluntarioService;
+    @Autowired
+    private ChatServiceImpl chatService;
 
 
     @Override
@@ -22,7 +32,7 @@ public class SolicitudDeAsistenciaServiceImpl implements ISolicitudDeAsistencia 
     }
 
     @Override
-    public Object update(Object o, Object o2) throws Exception {
+    public Object update(Object o, Object o2) {
         return null;
     }
 
@@ -32,7 +42,7 @@ public class SolicitudDeAsistenciaServiceImpl implements ISolicitudDeAsistencia 
     }
 
     @Override
-    public Object readById(Object o) throws Exception {
+    public Object readById(Object o) {
         return null;
     }
 
@@ -72,4 +82,76 @@ public class SolicitudDeAsistenciaServiceImpl implements ISolicitudDeAsistencia 
     public void eliminarSolicitud(int id) {
         solicitudDeAsistenciaRepository.deleteById(id);
     }
+
+
+
+    public boolean enviarSolicitud(SolicitudDeAsistencia solicitud, String message) throws PubNubException {
+
+
+        solicitud.setEstado("Pendiente");
+        solicitudDeAsistenciaRepository.save(solicitud);
+
+        // Enviar a todos los voluntarios conectados una solicitud
+        List<Voluntario> voluntariosConectados = voluntarioService.obtenerTodosLosVoluntarios();
+        for (Voluntario voluntario : voluntariosConectados) {
+            // Enviar la solicitud al voluntario utilizando el servicio de chat
+            
+        }
+
+        // Utilizar PubNub para el canal de emergencia
+        pubNub.publish()
+                .channel("emergencia")
+                .message(message)
+                .sync();
+
+        return true;
+
+
+        // Registar en la base de datos la solicitud en estado pendiente save
+        // Enviar a todos los vountarios conectado una solicitud
+        // usar el pubnub para el canal de emergencia
+
+
+    }
+
+    public boolean aceptarSolicitud(Integer solicitudId, Voluntario voluntario) throws PubNubException {
+
+        SolicitudDeAsistencia solicitudDeAsistencia = obtenerSolicitud(solicitudId);
+        if (solicitudDeAsistencia == null){
+            throw new IllegalArgumentException("Solicitud no encontrada");
+        }
+
+        solicitudDeAsistencia.setVoluntario(voluntario);
+        solicitudDeAsistencia.setEstado("aceptado");
+        solicitudDeAsistenciaRepository.save(solicitudDeAsistencia);
+
+        AdultoMayor adultoMayor = solicitudDeAsistencia.getAdultoMayor();
+        if (adultoMayor != null) {
+            notificarAdultoMayor(adultoMayor, "Solicitud Aceptada");
+        }
+        pubNub.publish()
+                .channel("chat-" + solicitudId)
+                .message("Solicitud Aceptada")
+                .sync();
+        return true;
+
+        // Buscar la solicitud
+        // asignar el Voluntario a la solicitud
+        //marcar la solicitud como aceptada
+        // notificar al adultoMayor que su solicitud ha sido acpetada
+
+    }
+
+    public void notificarAdultoMayor(AdultoMayor adultoMayor, String mensaje) throws PubNubException {
+
+        pubNub.publish()
+                .channel("notificaciones-" + adultoMayor.getIdAdultoMayor())
+                .message(mensaje)
+                .sync();
+    }
+
+
+
+
+
 }

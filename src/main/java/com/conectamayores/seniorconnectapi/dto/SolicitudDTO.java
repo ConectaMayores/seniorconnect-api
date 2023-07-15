@@ -1,21 +1,33 @@
 package com.conectamayores.seniorconnectapi.dto;
 
+import com.conectamayores.seniorconnectapi.model.AdultoMayor;
+import com.conectamayores.seniorconnectapi.model.Voluntario;
+
 import java.sql.Time;
+import java.time.LocalDateTime;
 
 public class SolicitudDTO {
 
-    private Long solicitudId;
+    private Integer solictudId;
+    private Integer adultoMayorId;
     private String estado;
-    private Time hora;
-    private VoluntarioDTO voluntario;
-    private ChatDTO chat;
+    private LocalDateTime hora;
+    private String mensaje;
 
-    public Long getSolicitudId() {
-        return solicitudId;
+    public Integer getSolictudId() {
+        return solictudId;
     }
 
-    public void setSolicitudId(Long solicitudId) {
-        this.solicitudId = solicitudId;
+    public void setSolictudId(Integer solictudId) {
+        this.solictudId = solictudId;
+    }
+
+    public Integer getAdultoMayorId() {
+        return adultoMayorId;
+    }
+
+    public void setAdultoMayorId(Integer adultoMayorId) {
+        this.adultoMayorId = adultoMayorId;
     }
 
     public String getEstado() {
@@ -26,27 +38,21 @@ public class SolicitudDTO {
         this.estado = estado;
     }
 
-    public Time getHora() {
+    public LocalDateTime getHora() {
         return hora;
     }
 
-    public void setHora(Time hora) {
+    public void setHora(LocalDateTime hora) {
         this.hora = hora;
     }
 
-    public VoluntarioDTO getVoluntario() {
-        return voluntario;
+    public String getMensaje() {
+        return mensaje;
     }
 
-    public void setVoluntario(VoluntarioDTO voluntario) {
-        this.voluntario = voluntario;
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
     }
 
-    public ChatDTO getChat() {
-        return chat;
-    }
 
-    public void setChat(ChatDTO chat) {
-        this.chat = chat;
-    }
 }
