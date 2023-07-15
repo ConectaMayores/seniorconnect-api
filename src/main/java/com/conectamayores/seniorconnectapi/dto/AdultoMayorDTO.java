@@ -1,6 +1,6 @@
 package com.conectamayores.seniorconnectapi.dto;
 
-import com.conectamayores.seniorconnectapi.model.Usuario;
+import jakarta.persistence.GeneratedValue;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
@@ -19,6 +19,16 @@ public class AdultoMayorDTO {
     @NotBlank(message = "El género es obligatorio")
     private String genero;
 
+    @GeneratedValue
+    private Integer idAdultoMayor;
+
+    public Integer getIdAdultoMayor() {
+        return idAdultoMayor;
+    }
+
+    public void setIdAdultoMayor(Integer idAdultoMayor) {
+        this.idAdultoMayor = idAdultoMayor;
+    }
 
     public String getNombreCompleto() {
         return nombreCompleto;
