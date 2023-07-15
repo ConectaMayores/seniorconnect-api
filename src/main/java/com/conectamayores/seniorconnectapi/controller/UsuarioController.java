@@ -1,14 +1,16 @@
 package com.conectamayores.seniorconnectapi.controller;
 
 
-import com.conectamayores.seniorconnectapi.dto.CambioContraseñaRequest;
-import com.conectamayores.seniorconnectapi.exceptions.ContraseñaIgualException;
-import com.conectamayores.seniorconnectapi.exceptions.ContraseñaInvalidaException;
+
+import com.conectamayores.seniorconnectapi.config.UsuarioMapper;
+import com.conectamayores.seniorconnectapi.dto.CambioContraRequest;
+import com.conectamayores.seniorconnectapi.dto.UsuarioDTO;
+import com.conectamayores.seniorconnectapi.exceptions.ContraIgualException;
+import com.conectamayores.seniorconnectapi.exceptions.ContraInvalidaException;
 import com.conectamayores.seniorconnectapi.exceptions.UsuarioExistenteException;
 import com.conectamayores.seniorconnectapi.exceptions.UsuarioNoEncontradoException;
 import com.conectamayores.seniorconnectapi.model.Usuario;
-import com.conectamayores.seniorconnectapi.repository.AdultoMayorRepository;
-import com.conectamayores.seniorconnectapi.repository.UsuarioRepository;
+
 import com.conectamayores.seniorconnectapi.service.impl.UsuarioServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,39 +25,49 @@ import java.util.List;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UsuarioController {
 
-
     private final UsuarioServiceImpl usuarioService;
 
-
     @PostMapping
-    public ResponseEntity<?> crearUsuario(@RequestBody Usuario usuario) {
+    public ResponseEntity<?> crearUsuario(@RequestBody UsuarioDTO dto) {
+
         try {
-            Usuario nuevoUsuario = usuarioService.crearUsuario(usuario);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Usuario "+ usuario.getNombreUsuario()+" registrado con exito ");
-        } catch (UsuarioExistenteException e) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("El nombre de usuario: " + usuario.getNombreUsuario()+", ya está registrado");
-        } catch (Exception e) {
+            Usuario user = UsuarioMapper.dtoToEntity(dto); // Mapeo de DTO a entidad
+
+            // Verificar si el usuario ya existe
+            if (usuarioService.existsByNombreUsuario(user.getNombreUsuario())) {
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("El nombre de usuario: " + dto.getNombreUsuario() + ", ya está registrado");
+            }
+
+            Usuario nuevoUsuario = usuarioService.save(user); // Guardar usuario
+
+            UsuarioDTO createUserDTO = UsuarioMapper.entityToDto(nuevoUsuario); // Mapeo de entidad a DTO
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(createUserDTO); // Retornar usuario creado con estatus 201
+
+        } catch (Exception e) { // En caso de otros errores
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al crear el usuario");
         }
+
+
     }
 
     @GetMapping("/usuarios")
-    public ResponseEntity<List<Usuario>> getAllUsuarios() throws Exception {
+    public ResponseEntity<List<Usuario>> getAllUsuarios() {
         List<Usuario> usuarioList = usuarioService.findAll();
-        return new ResponseEntity<List<Usuario>>(usuarioList, HttpStatus.OK);
+        return new ResponseEntity<>(usuarioList, HttpStatus.OK);
     }
 
     @PutMapping("/{username}/change-password")
-    public ResponseEntity<String> cambiarContra(@PathVariable String username, @RequestBody CambioContraseñaRequest request) {
+    public ResponseEntity<String> cambiarContra(@PathVariable String username, @RequestBody CambioContraRequest request) {
         try {
-            usuarioService.cambiarContraseña(username, request.getContraseñaActual(), request.getNuevaContraseña());
+            usuarioService.cambiarClave(username, request.getContraActual(), request.getNuevaContra());
             return ResponseEntity.ok("Contraseña cambiada con éxito");
         } catch (UsuarioNoEncontradoException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario que me has dado no existe " + username);
-        } catch (ContraseñaInvalidaException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La contraseña actual es incorrecta " + request);
-        } catch (ContraseñaIgualException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La nueva contraseña no puede ser igual a la actual " + request);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("El usuario no existe" );
+        } catch (ContraInvalidaException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La contraseña actual es incorrecta " );
+        } catch (ContraIgualException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La nueva contraseña no puede ser igual a la actual ");
         }
     }
 

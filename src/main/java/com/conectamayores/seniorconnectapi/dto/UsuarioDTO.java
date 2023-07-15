@@ -1,12 +1,9 @@
 package com.conectamayores.seniorconnectapi.dto;
 
-
-
 public class UsuarioDTO {
     private String nombreUsuario;
-    private String contraseña;
-    private boolean conectado;
-    private boolean desconectado;
+    private String clave;
+    private boolean estado;
 
     public String getNombreUsuario() {
         return nombreUsuario;
@@ -16,27 +13,18 @@ public class UsuarioDTO {
         this.nombreUsuario = nombreUsuario;
     }
 
-    public String getContraseña() {
-        return contraseña;
+    public String getClave() {
+        return clave;
     }
 
-    public void setContraseña(String contraseña) {
-        this.contraseña = contraseña;
+    public void setClave(String clave) {
+        this.clave = clave;
     }
 
-    public boolean isConectado() {
-        return conectado;
+    public boolean isEstado() {
+        return estado;
     }
-
-    public void setConectado(boolean conectado) {
-        this.conectado = conectado;
-    }
-
-    public boolean isDesconectado() {
-        return desconectado;
-    }
-
-    public void setDesconectado(boolean desconectado) {
-        this.desconectado = desconectado;
+    public void setEstado(boolean estado) {
+        this.estado = estado;
     }
 }

@@ -45,28 +45,30 @@ public class UsuarioServiceImpl implements IUsuarioService{
 
         if(usuarioRepository.existsByNombreUsuario(usuario.getNombreUsuario())) {
             throw new UsuarioExistenteException("El nombre de usuario ya está registrado");
+        } else {
+            return usuarioRepository.save(usuario);
         }
-        return usuarioRepository.save(usuario);
+
     }
 
     @Override
-    public void cambiarContraseña(String username, String contraseñaActual, String nuevaContraseña) throws UsuarioNoEncontradoException, ContraseñaInvalidaException, ContraseñaIgualException {
+    public void cambiarClave(String username, String claveActual, String claveNueva) throws UsuarioNoEncontradoException, ContraInvalidaException, ContraIgualException {
         Usuario usuario = usuarioRepository.findByNombreUsuario(username);
 
         if (usuario == null) {
             throw new UsuarioNoEncontradoException("El usuario no existe");
         } else {
-            if (!usuario.getClave().equals(contraseñaActual)){
-                throw new ContraseñaInvalidaException("La contraseña actual es incorrecta");
-            }
-            else {
-                if (usuario.getClave().equals(contraseñaActual)) {
-                    throw new ContraseñaIgualException("La nueva contraseña no puede ser igual a la actual");
+            if (!usuario.getClave().equals(claveActual)) {
+                throw new ContraInvalidaException("La contraseña actual es incorrecta");
+            } else {
+                if (usuario.getClave().equals(claveNueva)) {
+                    throw new ContraIgualException("La nueva contraseña no puede ser igual a la actual");
                 } else {
-                    usuario.setClave(nuevaContraseña);
+                    usuario.setClave(claveNueva);
                     usuarioRepository.save(usuario);
                 }
             }
+
         }
 
     }
@@ -86,6 +88,7 @@ public class UsuarioServiceImpl implements IUsuarioService{
     public List readAll() throws Exception {
         return usuarioRepository.findAll();
     }
+
 
     @Override
     public Object readById(Object o) throws Exception {
@@ -113,5 +116,9 @@ public class UsuarioServiceImpl implements IUsuarioService{
     public List<UsuarioDTO> obtenerUsuarios() {
         List<Usuario> usuarios = usuarioRepository.findAll();
         return convertirAUsuarioDTO(usuarios);
+    }
+
+    public boolean existsByNombreUsuario(String nombreUsuario) {
+        return usuarioRepository.existsByNombreUsuario(nombreUsuario);
     }
 }
