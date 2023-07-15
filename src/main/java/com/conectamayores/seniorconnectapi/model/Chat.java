@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
+import java.time.LocalDateTime;
 
-import java.sql.Time;
 
 @Data
 @AllArgsConstructor
@@ -25,20 +25,20 @@ public class Chat {
     private String mensaje;
 
     @Column(name = "hora")
-    private Time hora;
+    private LocalDateTime hora = LocalDateTime.now();
 
     @Column(name = "estado")
     private String estado;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solicitud_id")
     private SolicitudDeAsistencia solicitud;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "adulto_mayor_id")
-    private AdultoMayor adultoMayor;
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "voluntario_id")
-    private Voluntario voluntario;
+
+
+    // TODO: quitar adultomayor y voluntario y poner usuario
 }

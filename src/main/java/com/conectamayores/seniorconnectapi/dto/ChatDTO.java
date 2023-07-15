@@ -1,12 +1,12 @@
 package com.conectamayores.seniorconnectapi.dto;
 
-import java.sql.Time;
+import java.time.LocalDateTime;
 
 public class ChatDTO {
 
     private Integer chatId;
     private String mensaje;
-    private Time hora;
+    private LocalDateTime hora;
     private String estado;
     private SolicitudDTO solicitud;
     private AdultoMayorDTO adultoMayor;
@@ -28,11 +28,11 @@ public class ChatDTO {
         this.mensaje = mensaje;
     }
 
-    public Time getHora() {
+    public LocalDateTime getHora() {
         return hora;
     }
 
-    public void setHora(Time hora) {
+    public void setHora(LocalDateTime hora) {
         this.hora = hora;
     }
 
